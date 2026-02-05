@@ -1,0 +1,17 @@
+# Binaries
+exporter
+*.exe
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env

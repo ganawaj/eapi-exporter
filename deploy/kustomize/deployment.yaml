@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eapi-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eapi-exporter
+  template:
+    metadata:
+      labels:
+        app: eapi-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9120"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: exporter
+          image: ghcr.io/ganawaj/eapi-exporter:latest
+          ports:
+            - name: metrics
+              containerPort: 9120
+          envFrom:
+            - secretRef:
+                name: eapi-exporter
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
